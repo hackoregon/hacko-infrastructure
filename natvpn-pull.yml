@@ -1,0 +1,27 @@
+---
+
+- hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    aws_instance_type: t2.micro
+    aws_quantity: 1
+    aws_public_ip: yes
+    aws_group: B15-NATVPNSecurityGroup-1V46R78H6RGQL
+    aws_vpc_subnet: subnet-e9c3278d
+    aws_image: ami-9abea4fb
+    aws_instance_tag: '{"Name":"{{ application }}_{{ server_env }}","Role":"{{ application }}"}'
+    application: natvpn
+    server_env: prod
+    aws_userdata: |
+      #!/bin/bash -ex
+      apt-add-repository -y ppa:ansible/ansible
+      apt-get update
+      apt-get install -y -q python-paramiko python-yaml python-jinja2 python-simplejson git-core ansible
+      echo -e "[{{application}}]\nlocalhost ansible_connection=local" > /etc/ansible/hosts
+      ansible-pull -U https://github.com/bmcgair/ansible-playbooks.git -d /etc/ansible/local-playbooks
+      exit 0
+
+  roles:
+    - launch-ec2

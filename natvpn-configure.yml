@@ -1,0 +1,11 @@
+---
+- name: Configure natvpn instance(s)
+  hosts: tag_Name_natvpn_hackoregon
+  user: ubuntu
+  become: yes
+
+  roles:
+    - webmin
+    - iptables
+    - makevpn
+

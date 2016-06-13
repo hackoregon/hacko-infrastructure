@@ -1,0 +1,45 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    instance_type: t2.micro
+    count: 1
+    image: ami-9abea4fb
+    region: us-west-2
+    vpc_subnet_id: subnet-6cb14609
+    keypair: cropcompass16
+    assign_public_ip: yes
+    instance_tags: '{"Name":"{{application}}_{{owner}}","Role":"{{application}}"}'
+    aws_instance_tag: '{"Name":"{{ application }}_{{ server_env }}","Role":"{{ application }}"}'
+    application: cropcompass-svc
+    owner: hackoregon
+    group: cropcompass-svc
+    id: 4
+    image_name: "ubuntu/images/hvm-ssd/ubuntu-trusty-14.04-amd64-server-*"
+    image_owner: "099720109477"
+    server_env: test
+    source_dest_check: "no"
+    wait: yes
+    user_data: |
+      #!/bin/bash -ex
+      #
+      #TO DO: Convert to ansible
+      #
+      #Create vagrant user
+      #Install git
+      sudo apt-get -y install git
+      sudo useradd -m vagrant
+      echo "vagrant ALL=(ALL) NOPASSWD:ALL" | sudo tee --append /etc/sudoers
+      sudo mkdir -p /vagrant
+      sudo chown vagrant -R /vagrant
+      sudo chmod -R u+w /vagrant
+      # Get the cromppas service repo
+      cd /vagrant
+      git clone -b znmeb-is-collecting-commits https://github.com/hackoregon/cropcompass-vagrant.git .
+      # Run the cropcompass installs
+      sudo su - vagrant /vagrant/scripts/installs.bash >>install.log
+      exit 0
+  roles:
+    - ec2-provision-instance

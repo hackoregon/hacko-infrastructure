@@ -23,6 +23,7 @@
     source_dest_check: "{{source_dest_check}}"
     id: "{{id}}"
     wait: "{{wait}}"
+    user_data: "{{user_data}}"
   register: ec2_info
 
 - debug: var=ec2_info

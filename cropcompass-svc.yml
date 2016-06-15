@@ -16,7 +16,7 @@
     application: cropcompass-svc
     owner: hackoregon
     group: cropcompass-svc
-    id: 7
+    id: 9
     image_name: "ubuntu/images/hvm-ssd/ubuntu-trusty-14.04-amd64-server-*"
     image_owner: "099720109477"
     server_env: test
@@ -35,7 +35,7 @@
       sudo mkdir -p /vagrant
       # Get the cromppas service repo
       cd /vagrant
-      git clone -b znmeb-is-collecting-commits https://github.com/hackoregon/cropcompass-vagrant.git .
+      git clone -b master https://github.com/hackoregon/cropcompass-vagrant.git .
       sudo chown vagrant:vagrant -R /vagrant
       # Run the cropcompass installs
       sudo su - vagrant /vagrant/scripts/installs.bash >>install.log
